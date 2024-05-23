@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.doit.CRUD.Model.Usuario;
@@ -14,6 +16,8 @@ public class UsuarioService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	
 	public ArrayList<Usuario> getUsers() {
 		return (ArrayList<Usuario>) usuarioRepository.findAll();
 	}
@@ -37,5 +41,21 @@ public class UsuarioService {
 		userModificado.setUSU_REG(false);
 		return userModificado;
 	}
-
+	
+	public Usuario registerUser(Usuario usuario) {
+        usuario.setUSU_PASS(passwordEncoder.encode(usuario.getUSU_PASS()));
+        return usuarioRepository.save(usuario);
+    }
+	public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+	 public Usuario findByUsername(String username) {
+	        return getByUSU_NOM(username);
+	    }
+	 private Usuario getByUSU_NOM(String nombre) {
+		 Optional<Usuario> usuarioOpt = usuarioRepository.findAll().stream()
+		            .filter(usuario -> usuario.getUSU_NOM().equals(nombre))
+		            .findFirst();        
+		        return usuarioOpt.orElse(null);
+	 }
 }

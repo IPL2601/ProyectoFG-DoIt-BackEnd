@@ -46,4 +46,19 @@ public class UsuarioController {
 	public Usuario unRegUser(@PathVariable Integer id) {
 		return usuarioService.unRegUser(id);
 	}
+	@PostMapping("/register")
+    public Usuario register(@RequestBody Usuario usuario) {
+		System.out.println(usuario.getUSU_PASS());
+        return usuarioService.registerUser(usuario);
+    }
+
+    @PostMapping("/login")
+    public Usuario login(@RequestBody Usuario usuario) {
+        Usuario existingUser = usuarioService.findByUsername(usuario.getUSU_NOM());
+        if (existingUser != null && usuarioService.checkPassword(usuario.getUSU_PASS(), existingUser.getUSU_PASS())) {
+            return usuarioService.findByUsername(usuario.getUSU_NOM());
+        } else {
+            return null;
+        }
+    }
 }
