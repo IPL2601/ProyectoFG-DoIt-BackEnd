@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +68,9 @@ public class TaskController {
 	@PutMapping("/{idTask}/do")
 	public Task doTask(@PathVariable Integer idTask) {
 		return taskService.doTask(idTask);
+	}
+	@DeleteMapping("/{idTask}")
+	public void deleteTask(@PathVariable Integer idTask) {
+		taskService.deleteTask(idTask);
 	}
 }

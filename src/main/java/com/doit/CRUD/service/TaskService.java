@@ -38,7 +38,9 @@ public class TaskService {
 		taskModificada.setTASK_DESC(task.getTASK_DESC());
 		taskModificada.setTASK_NOM(task.getTASK_NOM());
 		taskModificada.setTASK_PRI(task.getTASK_PRI());
-		return taskModificada;
+		taskModificada.setTASK_USU(task.getTASK_USU());
+		taskModificada.setTASK_DATE(task.getTASK_DATE());
+		return this.taskRepository.save(taskModificada);
 	}
 
 	public Task doTask(Integer id) {
@@ -47,8 +49,12 @@ public class TaskService {
 		if (task == null) {
 			throw new EntityNotFoundException("Task not found with id: " + id);
 		}
-
-		task.setTASK_DONE(true);
+		
+		if (task.getTASK_DONE()) {
+			task.setTASK_DONE(false);			
+		} else {
+			task.setTASK_DONE(true);
+		}
 
 		taskRepository.save(task);
 
@@ -87,5 +93,8 @@ public class TaskService {
 		int currentMonth = cal.get(Calendar.MONTH + 1);
 		return new ArrayList<>(taskRepository.findMonthTasksByTaskUsu(taskUsu, currentMonth));
 	}
-
+	
+	public void deleteTask(Integer taskId) {
+		this.taskRepository.deleteById(taskId);
+	}
 }
