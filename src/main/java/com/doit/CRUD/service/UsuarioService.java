@@ -1,6 +1,7 @@
 package com.doit.CRUD.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class UsuarioService {
 	}
 
 	public Usuario regUser(Integer id) {
+		List<Usuario> usuarios = usuarioRepository.findAll();
 		Usuario userModificado = usuarioRepository.findById(id).orElse(null);
 		userModificado.setUSU_REG(true);
 		return userModificado;
